@@ -55,9 +55,84 @@ def alumnos():
     return render_template("alumnos.html", form = alum_form)
 
 # -------------------------------------------- ACTIVIDAD 2 --------------------------------------------------
+@app.route("/diccionario", methods=['GET', 'POST'])
+def diccionario():
+    dic_form = forms.DiccionarioForm(request.form)
+    return render_template("diccionario.html", form = dic_form)
 
+@app.route("/traducir", methods=['GET', 'POST'])
+def traducir():
+    dic_form = forms.DiccionarioForm(request.form)
+    print(dic_form.palabraEspañol.data)
+    print(dic_form.palabraIngles.data)
+    palabraEspanol = dic_form.palabraEspañol.data
+    palabraEspanol = palabraEspanol.upper()
+    palabraIngles = dic_form.palabraIngles.data
+    palabraIngles = palabraIngles.upper()
+    guardarPalabras(palabraEspanol, palabraIngles)
+
+    return render_template("traducir.html", form = dic_form)
+
+@app.route("/traduccion", methods=['GET', 'POST'])
+def traduccion():
+    dic_form = forms.DiccionarioForm(request.form)
+    palabraTraducir = dic_form.palabraTraducir.data
+    idiomaRBN = request.form.get("rbnIdiomas") # E - I
+        
+    if len(palabraTraducir) == 0:
+        flash("Introduce alguna palabra en el campo")
+    else:
+        palabraTraducir = palabraTraducir.upper()
+        palabraTraducida = devolverPalabra(palabraTraducir, idiomaRBN)
+        if len(palabraTraducida) == 0:
+            flash("La palabra no se encuentra en el diccionario actual")
+    
+    return render_template('traduccion.html', palabraTraducida = palabraTraducida)
+
+def guardarPalabras(palabraEspanol, palabraIngles):
+    dic = "{} - {}".format(palabraEspanol,palabraIngles)
+    f = open('diccionario.txt','a')
+    f.write('\n' + dic)
+    f.close()
+
+def devolverPalabra(palabraTraducir, idioma):
+    res = ""
+
+    f = open('diccionario.txt','r')
+    pares = f.readlines()
+    print(pares)
+    f.close()
+
+    for par in pares:
+        print(par)
+        if(par.count(palabraTraducir)):
+            palabras = par.split() # E,-,I
+            print(palabras)
+            if(idioma == "I"): #español - ingles
+                print(palabras[0])
+                print(palabras[1])
+                print(palabras[2])
+                print(palabraTraducir)
+                print(palabras[0] == palabraTraducir)
+
+                if palabras[0] == palabraTraducir:
+                    return palabras[2]
+                else:
+                    res = ""
+
+            elif idioma == "E": #ingles - español
+                if palabras[2] == palabraTraducir:
+                    return palabras[0]
+                else:
+                    res = ""
+            else:
+                res = ""
+        else:
+            res = ""
+
+    return res
 
 # A partir de que lugar se comienza la ejecucion
 if __name__ == "__main__":
     csrf.init_app(app)
-    app.run(debug=True)
+    app.run(debug=True,port=3000)
