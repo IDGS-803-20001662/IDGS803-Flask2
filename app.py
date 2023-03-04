@@ -275,7 +275,7 @@ def resistencias():
             labelb3 = "Plateado"
             colorb3 = "background: #a5a5a5; color: black"
 
-        if tol == "0.5":
+        if tol == "0.05":
             labeltol = "Dorado"
             colortol = "background: #b1a000; color: black"
         elif tol == "0.10":

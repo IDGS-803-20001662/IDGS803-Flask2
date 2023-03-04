@@ -40,4 +40,4 @@ class ResistenciasForm(Form):
     banda3 = SelectField('Banda 3:', choices=[('1', 'Negro'), ('10', 'Marron'), ('100', 'Rojo'), ('1000', 'Naranja'), 
                                               ('10000', 'Amarillo'), ('100000', 'Verde'), ('1000000', 'Azul'), ('10000000', 'Violeta'),
                                               ('100000000', 'Gris'), ('1000000000', 'Blanco'), ('0.1', 'Dorado'), ('0.01', 'Plateado')])
-    tolerancia = RadioField('Elige la tolerancia:', choices=[('0.5', 'Oro = 0.50'), ('0.10', 'Plata = 0.10'), ('0.20', 'Sin banda')])
+    tolerancia = RadioField('Elige la tolerancia:', choices=[('0.05', 'Oro = 0.05'), ('0.10', 'Plata = 0.10'), ('0.20', 'Sin banda = 0.2')])
